@@ -4,10 +4,24 @@ var express = require('express');
 var app = express(); 
 var routes = require("./routes");
 var logger = require('morgan')
+var mongoose = require('mongoose')
 
 var jsonParser = require("body-parser").json;
 
 app.use(logger);
+
+mongoose.connect('mongodb:localhost://27017/qa');
+
+var db = mongoose.connection;
+
+db.on('error', function(err){
+    console.log("this is error", err);
+})
+
+db.once('open', function(){
+    console.log("db connection successful");
+})
+
 app.use('/questions', routes);
 
 app.use(jsonParser())
