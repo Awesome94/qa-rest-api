@@ -1,4 +1,5 @@
 'use strict'
+
 var mongoose = require('mongoose');
 
 var Schema = mongoose.Schema
@@ -26,6 +27,7 @@ AnswerSchema.method("update", function(updates, callback){
 AnswerSchema.method("vote", function(vote, callback){
     vote == "up"? this.vote+=1: this.vote-=1
     this.parent().save(callback)
+});
 
 var QuestionSchema = new Schema({
     text: String,
@@ -37,7 +39,8 @@ var QuestionSchema = new Schema({
 QuestionSchema.pre("save", function(next){
    this.answers.sort(sortAnswers)
     next()
-})
+});
 
-var Questions = mongoose.model("Question", QuestionSchema)
-module.exports.Question = Question
+var Question = mongoose.model("Question", QuestionSchema);
+
+module.exports.Question = Question;
