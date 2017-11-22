@@ -3,19 +3,22 @@
 var express = require('express');
 var app = express(); 
 var routes = require("./routes");
+
 var logger = require('morgan')
-var mongoose = require('mongoose')
 
 var jsonParser = require("body-parser").json;
 
-app.use(logger);
+app.use(logger("dev"));
+app.use(jsonParser())
+
+var mongoose = require('mongoose')
 
 mongoose.connect('mongodb:localhost://27017/qa');
 
 var db = mongoose.connection;
 
 db.on('error', function(err){
-    console.log("this is error", err);
+    console.log("connection error", err);
 })
 
 db.once('open', function(){
@@ -23,8 +26,6 @@ db.once('open', function(){
 })
 
 app.use('/questions', routes);
-
-app.use(jsonParser())
 
 //catch 404 and forward to the error handler.
 app.use(function(req, res, next){
@@ -38,7 +39,7 @@ app.use(function(err, req, res, next){
     res.status(err.status || 500);
     res.json({
         error: {
-       message: error.message 
+       message: err.message 
         }
     })
 })

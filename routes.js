@@ -1,9 +1,9 @@
-import { Question } from './models';
-import { Error } from 'mongoose';
+// import { Question } from './models';
+// import { Error } from 'mongoose';
 
 'use strict';
 var express  = require('express'),
-router = express.Router()
+router = express.Router(),
 Question = require("./models").Question;
 
 //Preloading Questions.
