@@ -8,14 +8,14 @@ Question = require("./models").Question;
 
 //Preloading Questions.
 router.param("qID", function(req, res, next, id){
-    Question.findById(qID, function(err, doc){
+    Question.findById(id, function(err, doc){
         if(err) return next(err);
         if(!doc){
             err = new Error("Not found")
             err.status = 404;
             return next(err);
         }
-        res.question = doc;
+        req.question = doc;
         return next()
     });
 });
@@ -59,8 +59,8 @@ router.post('/:qID/answers', function(req, res, next){
     });
 });
 
-router.put('/:qID/answer/:aID', function(req, res, next){
-    req.answer.update(req.body, function(err){
+router.put('/:qID/answers/:aID', function(req, res, next){
+    req.answer.update(req.body, function(err, result){
         if (err){
             return next(err);
         }
@@ -68,7 +68,7 @@ router.put('/:qID/answer/:aID', function(req, res, next){
     });
 });
 
-router.delete('/:qID/answer/:aID', function(req, res, next){
+router.delete('/:qID/answers/:aID', function(req, res, next){
     req.answer.remove(function(err){
         res.question.save(function(){
         if(err) return next (err);
@@ -77,7 +77,7 @@ router.delete('/:qID/answer/:aID', function(req, res, next){
     });
 });
 
-router.post('/qID/answer/aID/vote-:dir', function(req, res, next){
+router.post('/:qID/answers/:aID/vote-:dir', function(req, res, next){
     if(req.params.dir.search(/^(up|down)$/) === -1){
         var err = new Error("Not found");
         err.status = 404;
@@ -93,6 +93,6 @@ router.post('/qID/answer/aID/vote-:dir', function(req, res, next){
         res.json(question);
     });
 });
-    
+
 
 module.exports = router;
