@@ -25,8 +25,9 @@ db.once("open", function(){
 });
 
 app.use(function(req, res, next){
-	res.header("Access-Control-Allow-Origin", "*");
-	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+	res.header("Access-Control-Allow-Origin", "*"); //used to restrict the domains the api should respond to
+	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");// tells the client which headers are permitted in the request
+	// below we grant pre-flight requests permission. These come in with the Http method called options 
 	if(req.method === "OPTIONS") {
 		res.header("Access-Control-Allow-Methods", "PUT,POST,DELETE");
 		return res.status(200).json({});
